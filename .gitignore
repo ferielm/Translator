@@ -1,23 +1,31 @@
-# Compiled class file
-*.class
+target/
+output/
+data/
+#Ignore IntelliJ IDEA project files
+.idea/
+*.uml
+*.iml
+*.ipr
+*.iws
+#Eclipse project files
+.classpath
+.project
+.settings/
+bin/
 
-# Log file
-*.log
+#NetBeans project files
+nbproject/
+**/nb-configuration.xml
 
-# BlueJ files
-*.ctxt
+#Documentation
+docs/presentation/node_modules/
+/docs/_build
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+dependency-reduced-pom.xml
+.flattened-pom.xml
+Teste.java
+Test.java
+.DS_Store
 *.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+*.~lock*
+~$*
