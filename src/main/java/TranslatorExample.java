@@ -16,7 +16,8 @@ public class TranslatorExample {
 		try {
 			//English to IGBO
 			System.out.println(GoogleTranslate.translate("ar", "allo"));
-			
+
+
 			//English to GREEK
 			System.out.println(GoogleTranslate.translate("fr", "how are you"));
 			
