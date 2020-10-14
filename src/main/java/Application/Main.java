@@ -1,7 +1,6 @@
 package Application;
 
-import Controller.Controller;
-import View.TranslateView;
+import Controller.GeneralController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,8 +25,8 @@ public class Main extends Application {
             //window.setMaximized(true);
             window.show();
 
-            Controller c = new Controller()
-                    .setTranslateView((TranslateView) loader.getController())
+            GeneralController c = new GeneralController()
+                    .setTranslateView(loader.getController())
                     .initView();
 
 
