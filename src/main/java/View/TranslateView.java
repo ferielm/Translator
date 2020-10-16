@@ -12,7 +12,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
+import java.util.Iterator;
 import java.util.Locale;
 
 
@@ -24,6 +27,12 @@ public class TranslateView {
     public MenuItem importJsonMI;
     @FXML
     public MenuItem importPropertiesMI;
+    @FXML
+    private MenuItem exportJson;
+    @FXML
+    private MenuItem exportProperties;
+    @FXML
+    private MenuItem saveMenuItem;
     @FXML
     public JFXTextField textToTranslateTF;
     @FXML
@@ -40,16 +49,31 @@ public class TranslateView {
     public JFXTextField textInArabTF;
     @FXML
     public JFXTextField textInEnglishTF;
+    @FXML
+    private MenuItem exportXls;
+    @FXML
+    public Button clearTable;
 
     public void initTable(ObservableList<Locale> locales) {
         for (Locale locale : locales) {
             TableColumn<TranslationRow, String> column = new TableColumn<>();
             column.setText(locale.getDisplayLanguage());
+            column.setMinWidth(100);
             column.prefWidthProperty().bind(dictTable.widthProperty().divide(locales.size()));
             column.setCellValueFactory((TableColumn.CellDataFeatures<TranslationRow, String> row) -> {
                 return new SimpleStringProperty(row.getValue().getString(locale));
             });
             dictTable.getColumns().add(column);
         }
+    }
+
+    public void fillTable(Row fileRow, ObservableList<Locale> locales) {
+        Iterator<Cell> cellIterator = fileRow.cellIterator();
+        final TranslationRow row = new TranslationRow();
+        while (cellIterator.hasNext()) {
+            Cell cell = cellIterator.next();
+            row.getMap().put(locales.get(cell.getColumnIndex()), cell.getStringCellValue());
+        }
+        getDictTable().getItems().add(row);
     }
 }
