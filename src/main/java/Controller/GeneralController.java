@@ -10,23 +10,14 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.stage.FileChooser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Map;
 
 
 @NoArgsConstructor
@@ -85,14 +76,20 @@ public class GeneralController {
                 e.printStackTrace();
             }
         });
-
         translateView.clearTable.addEventHandler(ActionEvent.ACTION, e -> {
             translateView.dictTable.getItems().clear();
             openedFile = null;
             translateView.getSaveMenuItem().setDisable(true);
         });
         translateView.initTable(locales);
+        initSelectAllCB();
         return this;
+    }
+
+    private void initSelectAllCB() {
+        translateView.getSelectAllCB().selectedProperty().addListener((observable, oldValue, newValue) -> {
+            translateView.getDictTable().getItems().forEach(translationRow -> translationRow.getSelect().setSelected(newValue));
+        });
     }
 
     private void saveIntheOpenedFile() throws IOException {
@@ -107,6 +104,7 @@ public class GeneralController {
 
     private void clearFields() {
         translateView.getTextToTranslateTF().setText("");
+        translateView.getIDTF().setText("");
         translateView.getTranslationHBox().getChildren().forEach(node -> {
             ((JFXTextField) node).setText("");
         });
@@ -115,14 +113,16 @@ public class GeneralController {
     }
 
     private void addToTable() {
+        String id = translateView.getIDTF().getText();
         String textInFr = translateView.getTextToTranslateTF().getText();
         String textInEn = translateView.getTextInEnglishTF().getText();
         String textInAr = translateView.textInArabTF.getText();
-        addItToTable(textInFr, textInEn, textInAr);
+        addItToTable(id, textInFr, textInEn, textInAr);
     }
 
-    private void addItToTable(String textInFr, String textInEn, String textInAr) {
-        final TranslationRow row = new TranslationRow();
+    private void addItToTable(String id, String textInFr, String textInEn, String textInAr) {
+        final TranslationRow row = new TranslationRow()
+                .setId(id);
         row.getMap().put(Locale.FRENCH, textInFr);
         row.getMap().put(Locale.ENGLISH, textInEn);
         row.getMap().put(Locale.forLanguageTag("ar"), textInAr);
