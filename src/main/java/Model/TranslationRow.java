@@ -1,8 +1,9 @@
 package Model;
 
+import javafx.scene.control.CheckBox;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -12,9 +13,15 @@ import java.util.Locale;
  */
 @Getter
 @Setter
-@NoArgsConstructor
+@Accessors(chain = true)
 public class TranslationRow {
+    private String id;
     private final HashMap<Locale, String> map = new HashMap<>();
+    private CheckBox select;
+
+    public TranslationRow() {
+        select = new CheckBox();
+    }
 
     public String getString(Locale locale) {
         return map.get(locale);

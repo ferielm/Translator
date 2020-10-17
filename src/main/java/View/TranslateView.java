@@ -6,10 +6,8 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
@@ -27,6 +25,10 @@ public class TranslateView {
     public MenuItem importJsonMI;
     @FXML
     public MenuItem importPropertiesMI;
+    @FXML
+    public CheckBox selectAllCB;
+    @FXML
+    public JFXTextField iDTF;
     @FXML
     private MenuItem exportJson;
     @FXML
@@ -55,14 +57,25 @@ public class TranslateView {
     public Button clearTable;
 
     public void initTable(ObservableList<Locale> locales) {
+
+        TableColumn<TranslationRow, CheckBox> selectCol = new TableColumn<>("Select");
+        selectCol.setCellValueFactory(new PropertyValueFactory<>("select"));
+        dictTable.getColumns().add(selectCol);
+
+        TableColumn<TranslationRow, String> column = new TableColumn<>();
+        column.setText("ID");
+        column.setMinWidth(100);
+        column.prefWidthProperty().bind(dictTable.widthProperty().subtract(selectCol.getWidth()).divide(locales.size() + 1));
+        column.setCellValueFactory(new PropertyValueFactory<>("id"));
+        dictTable.getColumns().add(column);
+
         for (Locale locale : locales) {
-            TableColumn<TranslationRow, String> column = new TableColumn<>();
+            column = new TableColumn<>();
             column.setText(locale.getDisplayLanguage());
             column.setMinWidth(100);
-            column.prefWidthProperty().bind(dictTable.widthProperty().divide(locales.size()));
-            column.setCellValueFactory((TableColumn.CellDataFeatures<TranslationRow, String> row) -> {
-                return new SimpleStringProperty(row.getValue().getString(locale));
-            });
+            column.prefWidthProperty().bind(dictTable.widthProperty().subtract(selectCol.getWidth()).divide(locales.size() + 1));
+            column.setCellValueFactory((TableColumn.CellDataFeatures<TranslationRow, String> row) ->
+                    new SimpleStringProperty(row.getValue().getString(locale)));
             dictTable.getColumns().add(column);
         }
     }
