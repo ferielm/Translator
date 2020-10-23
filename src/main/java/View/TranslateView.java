@@ -5,7 +5,9 @@ import Model.TranslationRow;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -13,12 +15,19 @@ import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 
 @Getter
 public class TranslateView {
+    //<editor-fold desc="FXML">
+    @FXML
+    private Button confirmButton;
+    @FXML
+    private Button cancelButton;
     @FXML
     public MenuItem importXlsMI;
     @FXML
@@ -48,13 +57,16 @@ public class TranslateView {
     @FXML
     public TableView<TranslationRow> dictTable;
     @FXML
-    public JFXTextField textInArabTF;
+    private JFXTextField textInArabTF_ar;
     @FXML
-    public JFXTextField textInEnglishTF;
+    private JFXTextField textInEnglishTF_en;
     @FXML
     private MenuItem exportXls;
     @FXML
     public Button clearTable;
+    @FXML
+    private Button updateButton;
+    //</editor-fold>
 
     public void initTable(ObservableList<Locale> locales) {
 
@@ -79,14 +91,15 @@ public class TranslateView {
             dictTable.getColumns().add(column);
         }
     }
-
-    public void fillTable(Row fileRow, ObservableList<Locale> locales) {
-        Iterator<Cell> cellIterator = fileRow.cellIterator();
-        final TranslationRow row = new TranslationRow();
-        while (cellIterator.hasNext()) {
-            Cell cell = cellIterator.next();
-            row.getMap().put(locales.get(cell.getColumnIndex()), cell.getStringCellValue());
-        }
-        getDictTable().getItems().add(row);
+    public void showButtons(boolean add, boolean translate, boolean clearT, boolean clearF,
+                            boolean update, boolean confirm, boolean cancel) {
+        addButton.setVisible(add);
+        translateButton.setVisible(translate);
+        clearTable.setVisible(clearT);
+        clearButton.setVisible(clearF);
+        updateButton.setVisible(update);
+        confirmButton.setVisible(confirm);
+        cancelButton.setVisible(cancel);
     }
+
 }
