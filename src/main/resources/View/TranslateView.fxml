@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.TranslateView">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.TranslateView">
     <children>
         <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
@@ -49,8 +49,11 @@
                     <children>
                         <JFXTextField fx:id="iDTF" promptText="ID" />
                         <JFXTextField fx:id="textToTranslateTF" promptText="Mot a traduire " />
-                        <Button fx:id="translateButton" mnemonicParsing="false" text="Traduire" />
+                        <Button fx:id="translateButton" defaultButton="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Traduire" />
                         <Button fx:id="addButton" disable="true" mnemonicParsing="false" text="Ajouter" />
+                  <Button fx:id="updateButton" mnemonicParsing="false" text="Modifier" />
+                  <Button fx:id="confirmButton" mnemonicParsing="false" text="Confirmer" visible="false" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" text="Annuler" visible="false" />
                         <Button fx:id="clearButton" disable="true" mnemonicParsing="false" text="Vider" />
                         <Button fx:id="clearTable" mnemonicParsing="false" text="Vider table" />
                     </children>
@@ -62,8 +65,8 @@
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                             <children>
-                                <JFXTextField fx:id="textInArabTF" prefWidth="200.0" promptText="Arabe" />
-                                <JFXTextField fx:id="textInEnglishTF" layoutX="20.0" layoutY="20.0" prefWidth="200.0" promptText="English" />
+                                <JFXTextField fx:id="textInArabTF_ar" prefWidth="200.0" promptText="Arabe" />
+                                <JFXTextField fx:id="textInEnglishTF_en" layoutX="20.0" layoutY="20.0" prefWidth="200.0" promptText="English" />
                             </children>
                         </HBox>
                     </content>

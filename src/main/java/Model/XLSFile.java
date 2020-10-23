@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.GeneralController;
 import View.TranslateView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -20,8 +21,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-public class XLSFile {
-    public void exportXLS(ObservableList<TranslationRow> items, File file) throws IOException {
+public class XLSFile implements TranslationManip{
+    public void exportTranslations(ObservableList<TranslationRow> items, File file) throws IOException {
 
         if (file == null) {
             String name = JOptionPane.showInputDialog("Insérer le nom de fichier XLS :");
@@ -41,13 +42,17 @@ public class XLSFile {
         int indexRow = 1;
         ObservableList<TranslationRow> rows = items;
         for (TranslationRow tableRow : rows) {
-            HSSFRow row = sheet.createRow(indexRow);
-            int cellIndex = 0;
-            for (Map.Entry map : tableRow.getMap().entrySet()) {
-                HSSFCell cell = row.createCell(cellIndex++, CellType.STRING);
-                cell.setCellValue((String) map.getValue());
+            if (tableRow.getSelect().isSelected()) {
+                HSSFRow row = sheet.createRow(indexRow);
+                HSSFCell cell = row.createCell(0, CellType.STRING);
+                cell.setCellValue(tableRow.getId());
+                int cellIndex = 1;
+                for (Map.Entry map : tableRow.getMap().entrySet()) {
+                    cell = row.createCell(cellIndex++, CellType.STRING);
+                    cell.setCellValue((String) map.getValue());
+                }
+                indexRow++;
             }
-            indexRow++;
         }
         inputStream.close();
         // Write File
@@ -65,7 +70,10 @@ public class XLSFile {
         HSSFCellStyle style = createStyleForTitle(workbook);
 
         row = sheet.createRow(rownum);
-        int cellIndex = 0;
+        cell = row.createCell(0, CellType.STRING);
+        cell.setCellValue("ID");
+        cell.setCellStyle(style);
+        int cellIndex = 1;
         for (Map.Entry map : translationRow.getMap().entrySet()) {
             cell = row.createCell(cellIndex++, CellType.STRING);
             cell.setCellValue(((Locale) map.getKey()).getDisplayLanguage() + "_" + map.getKey());
@@ -96,11 +104,11 @@ public class XLSFile {
         return style;
     }
 
-    public File importXLS(TranslateView translateView) throws IOException {
-        translateView.dictTable.getItems().clear();
+    public File importTranslations(GeneralController generalController) throws IOException {
+       // translateView.dictTable.getItems().clear();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichier Config", "*xls"));
+                new FileChooser.ExtensionFilter("Fichier excel", "*xls"));
         fileChooser.setInitialDirectory(new File(getClass().getResource("/excel").getPath()));
         File f = fileChooser.showOpenDialog(null);
         if (f != null) {
@@ -118,7 +126,7 @@ public class XLSFile {
             Row row = rowIterator.next();
             while (rowIterator.hasNext()) {
                 row = rowIterator.next();
-                translateView.fillTable(row, getLocales(sheet));
+                generalController.fillTable(row, getLocales(sheet));
 
             }
         }
@@ -135,32 +143,5 @@ public class XLSFile {
         }
         return locales;
     }
-
-   /* public void save(File file, ObservableList<TranslationRow> items) throws IOException {
-        FileInputStream inputStream = new FileInputStream(file);
-
-        // Get the workbook instance for XLS file
-        HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
-
-        // Get first sheet from the workbook
-        HSSFSheet sheet = workbook.getSheetAt(0);
-
-        //ajouter une ligne
-        int indexRow = sheet.getPhysicalNumberOfRows();
-        ObservableList<TranslationRow> rows = items;
-        for (TranslationRow tableRow : rows) {
-            HSSFRow row = sheet.createRow(indexRow);
-            int cellIndex = 0;
-            for (Map.Entry map : tableRow.getMap().entrySet()) {
-                HSSFCell cell = row.createCell(cellIndex++, CellType.STRING);
-                cell.setCellValue((String) map.getValue());
-            }
-        }
-        inputStream.close();
-        // Write File
-        FileOutputStream out = new FileOutputStream(file);
-        workbook.write(out);
-        out.close();
-    }*/
 }
 
